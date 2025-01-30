@@ -93,4 +93,4 @@ jobs:
       - name: Auto Assign Reviewers
         uses: hmarr/auto-assign-reviewers@v1
         with:
-          reviewers: "flaviowillian"
+          reviewers: "FlavioWillian"
