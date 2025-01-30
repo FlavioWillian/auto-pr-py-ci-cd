@@ -18,7 +18,7 @@ jobs:
       - name: Auto Approve PR
         uses: hmarr/auto-approve-action@v3
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PAT_GITHUB_TOKEN }}
 
   # Fechar Issues automaticamente quando PRs são mergeados
   auto-close-issues:
