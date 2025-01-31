@@ -46,7 +46,7 @@ def criar_issue(file, line, descricao):
 
 # Função para adicionar a Issue ao Projeto
 def adicionar_issue_ao_projeto(issue_id):
-    PROJECT_ID = "YOUR_PROJECT_ID"  # Substitua pelo ID do seu projeto
+    PROJECT_ID = "1"  # Substitua pelo ID do seu projeto
     payload = {
         "query": """
         mutation {
