@@ -8,7 +8,6 @@ def hello_gcp(request):
     Retorna uma mensagem de boas-vindas baseada no parâmetro 'name'.
     """
     # TODO: [Implementar autenticação JWT] - Adicionar middleware para validar tokens JWT nas requisições
-    
     request_json = request.get_json(silent=True)
     request_args = request.args
 
