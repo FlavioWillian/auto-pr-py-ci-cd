@@ -47,24 +47,27 @@ jobs:
             });
 
   # Criar Issues automaticamente a partir de "// TODO:" no código
-  create-todo-issues:
+  create_todo_issues:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
         uses: actions/checkout@v3
 
-      - name: Verificar TODOs no código e criar Issues
-        run: |
-          grep -rn "// TODO:" . | while read line; do
-            FILE=$(echo "$line" | cut -d':' -f1)
-            LINE_NUM=$(echo "$line" | cut -d':' -f2)
-            DESCRIPTION=$(echo "$line" | cut -d':' -f3-)
-            
-            curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Accept: application/vnd.github.v3+json" \
-              https://api.github.com/repos/auto-pr-py-ci-cd/issues \
-              -d "{ \"title\": \"TODO encontrado em $FILE:$LINE_NUM\", \"body\": \"$DESCRIPTION\", \"labels\": [\"todo\"] }"
-          done
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar dependências
+        run: pip install requests
+
+      - name: Rodar Script para Criar Issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
+          REPO_OWNER: "FlavioWillian"  # Substitua pelo seu usuário ou organização
+          REPO_NAME: "auto-pr-py-ci-cd" # Substitua pelo nome correto do repositório
+          PROJECT_NUMBER: "1" # Número do projeto no GitHub
+        run: python scripts/create_issues.py
 
   # Gerar Changelog Automático
   generate-changelog:
