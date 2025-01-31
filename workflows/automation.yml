@@ -2,12 +2,14 @@ name: Automação de Projetos GitHub
 
 on:
   pull_request:
-    types: [opened, synchronize, closed]
+    types: [opened, synchronize, reopened, closed]
   issues:
     types: [closed]
   push:
     branches:
       - main
+      - homol
+      - develop
   workflow_dispatch:
 
 jobs:
