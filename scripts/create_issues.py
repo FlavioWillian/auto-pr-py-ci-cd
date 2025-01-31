@@ -13,6 +13,9 @@ HEADERS = {
     "Accept": "application/vnd.github+json"
 }
 
+# Regex para capturar TODOs no formato: # TODO: [Título] - Descrição
+TODO_PATTERN = re.compile(r"# TODO: \[(.*?)\] - (.*)")
+
 # Função para encontrar TODOs nos arquivos
 def encontrar_todos(diretorio="."):
     todos_encontrados = []
@@ -23,8 +26,11 @@ def encontrar_todos(diretorio="."):
                 with open(file_path, "r", encoding="utf-8") as f:
                     lines = f.readlines()
                     for i, line in enumerate(lines, start=1):
-                        if "// TODO:" in line or "# TODO:" in line:
-                            todos_encontrados.append((file_path, i, line.strip()))
+                        match = TODO_PATTERN.search(line)
+                        if match:
+                            titulo = match.group(1).strip()
+                            descricao = match.group(2).strip()
+                            todos_encontrados.append((file_path, i, titulo, descricao))
     return todos_encontrados
 
 def obter_issue_node_id(issue_number):
