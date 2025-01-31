@@ -49,6 +49,7 @@ def obter_issue_node_id(issue_number):
     if response.status_code == 200:
         issue_id = response.json()["data"]["repository"]["issue"]["id"]
         print(f"Node ID da Issue: {issue_id}")
+        print(f"Response: {response.json()}")
         return issue_id
     else:
         print(f"Erro ao obter Node ID da Issue: {response.json()}")

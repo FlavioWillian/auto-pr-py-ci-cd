@@ -7,7 +7,7 @@ def hello_gcp(request):
     Função HTTP para GCP Function.
     Retorna uma mensagem de boas-vindas baseada no parâmetro 'name'.
     """
-    // TODO: Criar no arquivo yml a estrutura de deploy após a aprovação e pull-request para a branch main
+    # TODO: [Implementar autenticação JWT] - Adicionar middleware para validar tokens JWT nas requisições
     
     request_json = request.get_json(silent=True)
     request_args = request.args
