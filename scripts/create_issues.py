@@ -30,7 +30,7 @@ def encontrar_todos(diretorio="."):
                         if match:
                             titulo = match.group(1).strip()
                             descricao = match.group(2).strip()
-                            todos_encontrados.append((file_path, i, titulo, descricao))
+                            todos_encontrados.append((file_path, i, titulo, descricao))  # Retorna 4 valores
     return todos_encontrados
 
 def obter_issue_node_id(issue_number):
@@ -114,7 +114,7 @@ def adicionar_issue_ao_projeto(issue_id):
 # Executar as funções
 if __name__ == "__main__":
     todos = encontrar_todos()
-    for file, line, descricao in todos:
-        issue_id = criar_issue(file, line, descricao)
+    for file, line, titulo, descricao in todos:
+        issue_id = criar_issue(file, line, titulo, descricao)
         if issue_id:
             adicionar_issue_ao_projeto(issue_id)
