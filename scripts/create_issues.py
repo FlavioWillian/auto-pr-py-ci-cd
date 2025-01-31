@@ -96,13 +96,17 @@ def criar_issue(file, line, titulo, descricao):
 def adicionar_issue_ao_projeto(issue_id):
     PROJECT_ID = "PVT_kwHOBr5Do84AxJ68"  # Substitua pelo ID do seu projeto
     query = f"""
-    mutation {{
-        addProjectV2ItemById(input: {{ projectId: "{PROJECT_ID}", contentId: "{issue_id}" }}) {{
-            item {{
-                id
-            }}
-        }}
-    }}
+    "variables": {
+        "input": {
+            "addToProjectV2Ids": [
+                "{PROJECT_ID}"
+            ],
+            "ids": [
+                "{issue_id}"
+            ],
+            "removeFromProjectV2Ids": []
+        }
+    }
     """
 
     response = requests.post("https://api.github.com/graphql", json={"query": query}, headers=HEADERS)
