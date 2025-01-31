@@ -7,11 +7,11 @@ def hello_gcp(request):
     Função HTTP para GCP Function.
     Retorna uma mensagem de boas-vindas baseada no parâmetro 'name'.
     """
-    // TODO: Criar no arquivo yml a estrutura de deploy após a aprovação e pull-request para a branch main
+    // TODO: #2 Criar no arquivo yml a estrutura de deploy após a aprovação e pull-request para a branch main
     
     request_json = request.get_json(silent=True)
     request_args = request.args
-    // TODO: Criar no arquivo yml a estrutura de deploy após a aprovação
+    // TODO: #1 Criar no arquivo yml body:Criar no arquivo yml a estrutura de deploy após a aprovação
 
     name = "Mundo"  # Valor padrão
     if request_json and "name" in request_json:
