@@ -1,0 +1,32 @@
+name: Create Issues from TODOs
+
+on:
+  push:
+    branches:
+      - main
+      - homol
+      - develop
+  workflow_dispatch:  # Permite rodar manualmente no GitHub Actions
+
+jobs:
+  create_todo_issues:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v3
+
+      - name: Configurar Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Instalar dependências
+        run: pip install requests
+
+      - name: Rodar Script para Criar Issues
+        env:
+          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
+          REPO_OWNER: "FlavioWillian"  # Substitua pelo seu usuário ou organização
+          REPO_NAME: "auto-pr-py-ci-cd" # Substitua pelo nome correto do repositório
+          PROJECT_NUMBER: "1" # Número do projeto no GitHub
+        run: python scripts/create_issues.py
