@@ -46,7 +46,7 @@ def criar_issue(file, line, descricao):
 
 # Função para adicionar a Issue ao Projeto
 def adicionar_issue_ao_projeto(issue_id):
-    PROJECT_ID = "#1"  # Substitua pelo ID do seu projeto
+    PROJECT_ID = "1"  # Substitua pelo ID do seu projeto
     payload = {
         "query": """
         mutation {
@@ -65,6 +65,7 @@ def adicionar_issue_ao_projeto(issue_id):
 
     if response.status_code == 200:
         print(f"Issue adicionada ao projeto V2: {PROJECT_ID}")
+        print(f"Resposta da API: {response.json()}")
     else:
         print(f"Erro ao adicionar Issue ao projeto: {response.json()}")
 
