@@ -25,7 +25,7 @@ jobs:
 
       - name: Rodar Script para Criar Issues
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.CLASS_GITHUB_TOKEN }}
           REPO_OWNER: "FlavioWillian"  # Substitua pelo seu usuário ou organização
           REPO_NAME: "auto-pr-py-ci-cd" # Substitua pelo nome correto do repositório
           PROJECT_NUMBER: "1" # Número do projeto no GitHub
