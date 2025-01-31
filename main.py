@@ -11,6 +11,7 @@ def hello_gcp(request):
     
     request_json = request.get_json(silent=True)
     request_args = request.args
+    // TODO: Criar no arquivo yml a estrutura de deploy após a aprovação
 
     name = "Mundo"  # Valor padrão
     if request_json and "name" in request_json:
