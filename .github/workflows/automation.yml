@@ -2,12 +2,14 @@ name: Automação de Projetos GitHub
 
 on:
   pull_request:
-    types: [opened, synchronize, closed]
+    types: [opened, synchronize, reopened, closed]
   issues:
     types: [closed]
   push:
     branches:
       - main
+      - homol
+      - develop
   workflow_dispatch:
 
 jobs:
@@ -36,7 +38,7 @@ jobs:
       - name: Criar uma nova issue para revisão
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PAT_GITHUB_TOKEN }}
           script: |
             github.issues.create({
               owner: context.repo.owner,
@@ -53,18 +55,40 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v3
 
-      - name: Verificar TODOs no código e criar Issues
+      - name: Verificar TODOs no código e criar Issues no projeto 'projectDev'
+        env:
+          GH_TOKEN: ${{ secrets.PAT_GITHUB_TOKEN }}
         run: |
-          grep -rn "// TODO:" . | while read line; do
-            FILE=$(echo "$line" | cut -d':' -f1)
-            LINE_NUM=$(echo "$line" | cut -d':' -f2)
-            DESCRIPTION=$(echo "$line" | cut -d':' -f3-)
-            
-            curl -X POST -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-              -H "Accept: application/vnd.github.v3+json" \
-              https://api.github.com/repos/auto-pr-py-ci-cd/issues \
-              -d "{ \"title\": \"TODO encontrado em $FILE:$LINE_NUM\", \"body\": \"$DESCRIPTION\", \"labels\": [\"todo\"] }"
-          done
+          TODOS=$(grep -rn "// TODO:" . || true)
+          
+          if [[ ! -z "$TODOS" ]]; then
+            while IFS= read -r line; do
+              FILE=$(echo "$line" | cut -d':' -f1)
+              LINE_NUM=$(echo "$line" | cut -d':' -f2)
+              DESCRIPTION=$(echo "$line" | cut -d':' -f3-)
+
+              # Criar issue no repositório correto
+              ISSUE_URL=$(curl -s -X POST -H "Authorization: token $GH_TOKEN" \
+                -H "Accept: application/vnd.github.v3+json" \
+                https://api.github.com/repos/FlavioWillian/auto-pr-py-ci-cd/issues \
+                -d "{ \"title\": \"TODO encontrado em $FILE:$LINE_NUM\", \"body\": \"$DESCRIPTION\", \"labels\": [\"todo\"] }" | jq -r '.html_url')
+
+              # Obter o issue ID
+              ISSUE_ID=$(curl -s -H "Authorization: token $GH_TOKEN" \
+                -H "Accept: application/vnd.github.v3+json" \
+                https://api.github.com/repos/FlavioWillian/auto-pr-py-ci-cd/issues \
+                | jq -r ".[] | select(.html_url == \"$ISSUE_URL\") | .id")
+
+              # Adicionar issue ao projeto 'projectDev'
+              curl -X POST -H "Authorization: token $GH_TOKEN" \
+                -H "Accept: application/vnd.github.v3+json" \
+                https://api.github.com/projects/columns/COLUMN_ID/cards \
+                -d "{ \"content_id\": \"$ISSUE_ID\", \"content_type\": \"Issue\" }"
+            done <<< "$TODOS"
+          else
+            echo "Nenhum TODO encontrado, pulando a criação de issues."
+          fi
+
 
   # Gerar Changelog Automático
   generate-changelog:
@@ -76,7 +100,7 @@ jobs:
       - name: Gerar Changelog
         uses: metcalfc/changelog-generator@v2
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.PAT_GITHUB_TOKEN }}
 
       - name: Commit do novo Changelog
         run: |
@@ -93,4 +117,4 @@ jobs:
       - name: Auto Assign Reviewers
         uses: hmarr/auto-assign-reviewers@v1
         with:
-          reviewers: "flaviowillian"
+          reviewers: "FlavioWillian"
