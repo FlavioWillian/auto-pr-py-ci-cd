@@ -109,6 +109,33 @@ def adicionar_issue_ao_projeto(issue_id):
 
     if response.status_code == 200:
         print(f"Issue adicionada ao projeto {PROJECT_ID}")
+
+        # Obter ID do item adicionado ao projeto
+        item_id = response.json()["data"]["addProjectV2ItemById"]["item"]["id"]
+
+        # Definir status ou campo customizado (opcional)
+        query_status = f"""
+        mutation {{
+            updateProjectV2ItemFieldValue(input: {{
+                projectId: "{PROJECT_ID}",
+                itemId: "{item_id}",
+                fieldId: "PVTSSF_lAHOBr5Do84AxJ68zgnT9Sc",
+                value: {{ singleSelectOptionId: "f75ad846" }}
+            }}) {{
+                projectV2Item {{
+                    id
+                }}
+            }}
+        }}
+        """
+
+        response_status = requests.post("https://api.github.com/graphql", json={"query": query_status}, headers=HEADERS)
+
+        if response_status.status_code == 200:
+            print(f"Status atualizado para 'To Do' no projeto {PROJECT_ID}")
+        else:
+            print(f"Erro ao atualizar status: {response_status.json()}")
+
     else:
         print(f"Erro ao adicionar Issue ao projeto: {response.json()}")
 
