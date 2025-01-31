@@ -59,7 +59,7 @@ def adicionar_issue_ao_projeto(issue_id):
         """
     }
     
-    payload["query"] = payload["query"].replace("PROJECT_ID", PROJECT_ID).replace("ISSUE_ID", issue_id)
+    payload["query"] = payload["query"].replace("PROJECT_ID", str(PROJECT_ID)).replace("ISSUE_ID", str(issue_id))
 
     response = requests.post("https://api.github.com/graphql", json=payload, headers=HEADERS)
 
