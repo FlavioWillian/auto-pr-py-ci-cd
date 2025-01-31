@@ -1,0 +1,5 @@
+{
+    "editor.showDeprecated": false,
+    "todo-tree.general.tags": [],
+    "todo-tree.regex.regex": "(?!TODO:)"
+}
