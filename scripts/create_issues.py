@@ -46,11 +46,25 @@ def criar_issue(file, line, descricao):
 
 # Função para adicionar a Issue ao Projeto
 def adicionar_issue_ao_projeto(issue_id):
-    url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/projects/{PROJECT_NUMBER}/issues/{issue_id}"
-    response = requests.post(url, headers=HEADERS)
+    PROJECT_ID = "YOUR_PROJECT_ID"  # Substitua pelo ID do seu projeto
+    payload = {
+        "query": """
+        mutation {
+            addProjectV2ItemById(input: {projectId: "PROJECT_ID", contentId: "ISSUE_ID"}) {
+                item {
+                    id
+                }
+            }
+        }
+        """
+    }
+    
+    payload["query"] = payload["query"].replace("PROJECT_ID", PROJECT_ID).replace("ISSUE_ID", issue_id)
 
-    if response.status_code == 201:
-        print(f"Issue adicionada ao projeto: {url}")
+    response = requests.post("https://api.github.com/graphql", json=payload, headers=HEADERS)
+
+    if response.status_code == 200:
+        print(f"Issue adicionada ao projeto V2: {PROJECT_ID}")
     else:
         print(f"Erro ao adicionar Issue ao projeto: {response.json()}")
 
