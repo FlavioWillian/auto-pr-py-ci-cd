@@ -2,10 +2,8 @@ name: Create Issues from TODOs
 
 on:
   push:
-    branches:
-      - main
-      - homol
-      - develop
+    branches-ignore:
+      - main  # Ignora pushes para a branch main
   workflow_dispatch:  # Permite rodar manualmente no GitHub Actions
 
 jobs:
