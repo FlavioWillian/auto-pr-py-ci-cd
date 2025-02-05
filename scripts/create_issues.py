@@ -13,7 +13,7 @@ HEADERS = {
     "Accept": "application/vnd.github+json"
 }
 
-# Regex para capturar TODOs no formato: # TODO: [Título] - Descrição
+# Regex para capturar TODOs no formato: # Todo(Em maiusculo): [Título] - Descrição
 TODO_PATTERN = re.compile(r"# TODO: \[(.*?)\] - (.*)")
 
 # Função para encontrar TODOs nos arquivos

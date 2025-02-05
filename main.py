@@ -14,6 +14,7 @@ def hello_gcp(request):
     name = "Mundo"  # Valor padrão
     if request_json and "name" in request_json:
         name = request_json["name"]
+        # TODO: [Criando task para o Edu ver] - A automação vai criar essa task e o edu vai poder fazer isso nos codigos tudo.
     elif request_args and "name" in request_args:
         name = request_args["name"]
 
