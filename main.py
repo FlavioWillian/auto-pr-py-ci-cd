@@ -18,4 +18,5 @@ def hello_gcp(request):
     elif request_args and "name" in request_args:
         name = request_args["name"]
 
+    # TODO: [Criando mais uma TASK] - Essa Task é para testar a correção de criação duplicada do workflow
     return jsonify({"message": f"Olá, {name}!"}), 200
