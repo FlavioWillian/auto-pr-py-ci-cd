@@ -55,8 +55,31 @@ def obter_issue_node_id(issue_number):
         print(f"Erro ao obter Node ID da Issue: {response.json()}")
         return None
 
+def issue_existe(titulo):
+    """Verifica se uma Issue com o mesmo título já existe no repositório."""
+    url = f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/issues"
+    response = requests.get(url, headers=HEADERS)
+
+    if response.status_code == 200:
+        issues = response.json()
+        for issue in issues:
+            if issue["title"] == titulo:
+                print(f"Issue já existe: {issue['html_url']}")
+                return True  # A Issue já existe
+    else:
+        print(f"Erro ao verificar Issues existentes: {response.json()}")
+    
+    return False  # A Issue não existe
+
+
 # Função para criar uma issue no GitHub
 def criar_issue(file, line, titulo, descricao):
+    
+    # Verifica se a Issue já existe
+    if issue_existe(titulo):
+        print(f"⚠️ Issue já existe para '{titulo}', ignorando criação.")
+        return None
+    
     issue_title = titulo
 
     issue_body = f"""
